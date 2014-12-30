@@ -1,3 +1,4 @@
+(function() {
 // metrics
 var width = 960,
     height = 500,
@@ -46,3 +47,4 @@ d3.csv("data.csv", function(error, data) {
       .text(function(d) { return d.data.age; });
 
 });
+})();
