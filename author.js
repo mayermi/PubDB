@@ -1,4 +1,5 @@
-$(function() {
+(function() {
+  $(function() {
   $( "#accordion" ).accordion({
     heightStyle: "content";
   });
@@ -13,3 +14,4 @@ $(function() {
     }
   });
 </script>
+})();
