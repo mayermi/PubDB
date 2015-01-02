@@ -20,12 +20,12 @@ var pie = d3.layout.pie()
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // data. First is lable, second is number for section-radius
 // IS EXAMPLE DATA FOR NOW!!
-d3.csv("data.csv", function(error, data) {
+d3.csv("../DATA/data.csv", function(error, data) {
 
   data.forEach(function(d) {
     d.population = +d.population;
@@ -33,7 +33,7 @@ d3.csv("data.csv", function(error, data) {
 
   var g = svg.selectAll(".arc")
       .data(pie(data))
-    .enter().append("g")
+      .enter().append("g")
       .attr("class", "arc");
 
   g.append("path")
