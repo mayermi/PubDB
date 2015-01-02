@@ -1,21 +1,5 @@
-<!DOCTYPE html> 
-<html lang="de"> 
-<head> 
-	<meta charset="UTF-8"/> 
-	<title>D3 - Piechart</title> 
-	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-</head> 
-<body> 
-	<h1> D3 - Piechart </h1>
 
-
-
-	<script>
-
-	
-	//console.log("test");
-
+(function() {
 	
 	//piehart	
 		
@@ -41,7 +25,7 @@
 		.append("g")
 		.attr("transform", "translate(" + w/2 + "," + h/2  + ")");
 		
-	d3.csv("data.csv", function(error, data) {
+	d3.csv("../DATA/data.csv", function(error, data) {
 	
 		data.forEach(function(d) {
 			d.population = +d.population;
@@ -68,10 +52,4 @@
 				return d.data.age;
 				});
 	});
-			
-			
-		
-	
-	</script>
-</body> 
-</html> 
+	})();	
