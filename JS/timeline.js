@@ -36,7 +36,7 @@ var margin = {top: 40, right: 20, bottom: 30, left: 40},
 
 	svg.call(tip);
 
-	d3.tsv("./DATA/timelineData.tsv", type, function(error, data) {
+	d3.tsv("../DATA/timelineData.tsv", type, function(error, data) {
 	  x.domain(data.map(function(d) { return d.letter; }));
 	  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
 

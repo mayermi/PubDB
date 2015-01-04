@@ -30,14 +30,11 @@
       .enter().append("circle")
       .attr("class", "nodes")
       .attr("r", 5)
+      .on("mouseup", authorClicked)
       .style("fill", function(d) {
         return color(d.group);
         })
       .call(force.drag);
-      
-	 /* node.append("a")
-		.attr("xlink:href", "HTML/group.html");		//funktioniert nicht		*/
-	  
 	  
     node.append("title")
       .text(function (d) {return d.name;});
@@ -77,7 +74,10 @@
 	  
   });
   
- 
+  function authorClicked () {
+        // FEHLT: Übertragung welcher Autor geladen wird!
+        location.replace("HTML/author.html");
+      };
 	  
 	
   
