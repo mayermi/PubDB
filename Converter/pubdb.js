@@ -1,6 +1,6 @@
 (function($, global) {
 	var PubDBtoJSONConverter = function() {
-		this.pubDBpath = "http://localhost:8888/"; // <-- node server url here (converter.js)  
+		this.pubDBpath = "http://localhost:3000/"; // <-- node server url here (converter.js)  
 		this.$pubDB = null;
 		// this.callback = callback;
 		this.pubJson = [];
@@ -13,6 +13,8 @@
 
 		// get html data from node server and create json
 		$.get(this.pubDBpath, function(data) {
+			console.log('initializing');
+			//console.log('data', data);
 			_this.$pubDB = $(data); // create jquery object from html code
 
 			callback(_this.$pubDB);
