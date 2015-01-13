@@ -13,6 +13,8 @@
 
 		// get html data from node server and create json
 		$.get(this.pubDBpath, function(data) {
+			console.log('initializing');
+			//console.log('data', data);
 			_this.$pubDB = $(data); // create jquery object from html code
 
 			callback(_this.$pubDB);
