@@ -1,0 +1,77 @@
+body {
+   font-family: 'Nixie One', monospace;
+   font-size: 62.5%;
+   margin: 0.6em 1em;
+}
+
+button {
+   background: #ddd;
+   border: 0.0625em solid #aaa;
+   border-left: none;
+   border-radius: 4px;
+   box-sizing: border-box;
+   font-size: 1.6em;
+   line-height: 1.5em;
+   padding: 0.3125em 0.625em;
+}
+
+form {
+   margin-bottom: 1.2em;
+}
+
+form > button {
+   border-bottom-left-radius: 0;
+   border-top-left-radius: 0;
+}
+
+form > input[type='search'] {
+   border-bottom-right-radius: 0;
+   border-top-right-radius: 0;
+}
+
+img {
+   border: 2px solid red;
+   box-sizing: border-box;
+   width: 100%;
+}
+
+input[type='search'] {
+   border: 0.0625em solid #aaa;
+   border-radius: 4px;
+   box-sizing: border-box;
+   float: left;
+   font-size: 1.6em;
+   line-height: 1.5em;
+   padding: 0.3125em 0.625em;
+}
+
+nav {
+   margin-bottom: 1.2em;
+}
+
+nav > ol {
+   list-style: none;
+   margin: 0;
+   overflow: hidden;
+   padding: 0;  
+}
+
+nav > ol > li {
+   float: left;
+   font-size: 1.6em;
+   line-height: 1.5em;
+   margin-right: 0.625em;
+}
+
+@media (min-width: 520px) {
+   header > form {
+      float: right;
+   }
+
+   nav {
+      float: left;
+   }
+}
+
+
+

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>PubDB</title>
+		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Nixie+One'>
+		<link rel='stylesheet' href='../CSS/normalize.css'>
+    	<link rel='stylesheet' href='../CSS/style.css'>
+	</head>
+	<body>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+		<header>
+			<nav>
+				<ol>
+					<li>
+						<a href='../index.html'>Network</a>
+					</li>
+					<li>
+						<a href='timeline.html'>Timeline</a>
+					</li>
+				</ol>
+			</nav>
+
+			<button>Filters</button>
+		</header>
+		
+		<form>
+			<input type='search' placeholder='Author'>
+			<button type='submit'>search</button>
+		</form>
+
+		<form>
+			<input type='search' placeholder='Keyword'>
+			<button type='submit'>search</button>
+		</form>
+
+		<div>
+			<h2>Years</h2>
+			<input type="range" id="slider" min="1910" max="2014" value="25" />
+		</div>
+
+		<main>
+			<script src='../JS/timeline.js'></script>
+			<script src='../JS/timeline test.js'></script>
+			<div>
+				<img src="../DATA/img/timeline.png">
+			</div>
+		</main>
+	</body>
+<html>
