@@ -23,8 +23,8 @@ $(document).ready(function() {
 				$('span').text(new Date() - start + "ms");
 
 				$('h2').show();
-				$('#publications').val(JSON.stringify(publicationsJSON)).show();
-				$('#authors').val(JSON.stringify(authorsJSON)).show();
+				$('#publications').val(JSON.stringify(publicationsJSON, null, 2)).show();
+				$('#authors').val(JSON.stringify(authorsJSON, null, 2)).show();
 			});
 		});
 	});
