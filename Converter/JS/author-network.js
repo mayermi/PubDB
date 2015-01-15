@@ -28,13 +28,21 @@
 		  for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
             for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
               
+			  if (i < (l-1)){
+			  
 			  nodes = nodes + "{'name':'" + publicationsJSON[i].authors[j].name + "','group':" + i + "},";
 			  
+			  } else {
+			  
+			  nodes = nodes + "{'name':'" + publicationsJSON[i].authors[j].name + "','group':" + i + "}";
+			  
+			  }
+			 links = links + 
 			  
             }
           }
 		  
-		  //nodes = nodes + "]}";
+		  nodes = nodes + "]}";
 		  console.log(nodes);
 		  
 		  var force = d3.layout.force()     //force-directed layout

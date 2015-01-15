@@ -1,27 +1,44 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:xlink="http://www.w3.org/1999/xlink">
 	<head>
-		<meta charset="utf-8">
-
 		<title>PubDB</title>
-
-		<script src="jquery1.11.1.js"></script>
-		<script src="http://d3js.org/d3.v3.min.js"></script>
-		<script src="pubdb.js"></script>
-		<script src="main.js"></script>
+		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Nixie+One'>
+		<link rel='stylesheet' href='CSS/network.css'>
+		<link rel='stylesheet' href='CSS/normalize.css'>
+    	<link rel='stylesheet' href='CSS/style.css'>
 	</head>
+
 	<body>
-		<img src="assets/loading.gif" style="position: relative; display: block; top: 40%; margin: 0 auto;" alt="loading">
+		<script src="jquery1.11.1.js"></script>
+    	<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script type='text/javascript' src="http://bost.ocks.org/mike/fisheye/fisheye.js?0.0.3"></script>
+		<script src="pubdb.js"></script>
+		
+		
+		<header>
+			<nav>
+				<ol>
+					<li>
+						<a href='index.html'>Network</a>
+					</li>
+					<li>
+						<a href='HTML/timeline.html'>Timeline</a>
+					</li>
+				</ol>
+			</nav><br /><br />
 
-		<h2 style="display: none;">Publications</h2>
-		<textarea style="display: none;" id="publications" rows="14" cols="150">
-			<!-- Publications JSON -->
-		</textarea>
+			<form>
+				<input type='search' placeholder='Author'>
+				<button type='submit'>search</button>
+			</form>
+		</header>
 
-		<h2 style="display: none;">Authors</h2>
-		<textarea style="display: none;" id="authors" rows="14" cols="150">
-			<!-- Authors JSON -->
-		</textarea>
-
-		<div id="chart"></div>
+		<main>
+      		
+			<h3>Author-Network</h3>
+			<div id="network">
+			<script src='JS/author-network.js'></script>
+			</div>
+		</main>
 	</body>
-</html>
+<html>
