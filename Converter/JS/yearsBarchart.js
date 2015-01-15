@@ -2,7 +2,7 @@ $(document).ready(function() {
   var start = new Date();
   var publicationsJSON = []
   authorsJSON = [];
-  var author = "Florian Alt";
+  var author = "Heinrich Hussmann";
   
   // create a new pubDB json object
   var converter = new pubDB.json();
@@ -17,6 +17,7 @@ $(document).ready(function() {
       converter.buildAuthorJSON(pubData, function(authorData) {
         authorsJSON = authorData;
 
+        var years = [];
         var yeardata = [];
         var publicationyears = [];
 
@@ -40,42 +41,63 @@ $(document).ready(function() {
           }
         }
 
-        console.log(publicationyears);
-        yeardata = countyears(publicationyears);
-        console.log(yeardata);
+        years = countyears(publicationyears)[0];
+        yeardata = countyears(publicationyears)[1];
 
+        $("#publicationyears").text(years[0] + " - " + years[years.length-1]);
+        console.log(years[0] + " - " + years[years.length-1]);
 
-
-      //Width and height
-      var w = 500;
-      var h = 100;
-      var barPadding = 1;
+        //Width and height
+        var w = 500;
+        var h = 100;
+        var barPadding = 1;
       
-      //Create SVG element
-      var svg = d3.select("body")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h);
+        //Create SVG element
+        var svg = d3.select("#barchart")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h);
 
-      svg.selectAll("rect")
-         .data(yeardata)
-         .enter()
-         .append("rect")
-         .attr("fill", "teal")
-         .attr("x", function(d, i) {
-            return i * (w / yeardata.length);
-         })
-         .attr("y", function(d) {
-            return h - (d * 4);
-         })
-         .attr("width", w / yeardata.length - barPadding)
-         .attr("height", function(d) {
-            return d * 4;
-         });
+        svg.selectAll("rect")
+          .data(yeardata)
+          .enter()
+          .append("rect")
+          .attr("x", function(d, i) {
+              return i * (w / yeardata.length);
+          })
+          .attr("y", function(d) {
+              return h - (d * 4);
+          })
+          .attr("width", w / yeardata.length - barPadding)
+          .attr("height", function(d) {
+              return d * 4;
+          })
+          .attr("fill", function(d) {
+            return "rgb(0, " + (d * 10) + ", " + (d * 10) + ")";
+            console.log(d);
+          });
 
+        svg.selectAll("text")
+          .data(yeardata)
+          .enter()
+          .append("text")
+          .text(function(d) {
+            return d;
+          })
+          .attr("text-anchor", "middle")
+          .attr("x", function(d, i) {
+              return i * (w / yeardata.length) + (w / yeardata.length - barPadding) / 2;
+          })
+          .attr("y", function(d) {
+              return h - (d * 4) - 9;
+          })
+          .attr("font-family", "sans-serif")
+          .attr("font-size", "11px")
+          .attr("fill", "black");
       });
     });
   });
+
   
   function countyears(arr) {
           var a = [], b = [], prev;
@@ -90,8 +112,10 @@ $(document).ready(function() {
             }
             prev = arr[i];
           }
-          //return [a, b];
-          return b;
+          var c = a.map(Number);
+
+          var array = [a, b];
+          return array;
         }
 
 });

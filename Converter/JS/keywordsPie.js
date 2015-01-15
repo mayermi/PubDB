@@ -22,7 +22,8 @@
           var w = 400;
           var h = 400;
           var r = h/2;
-          var color = d3.scale.category20c();
+          //var color = d3.scale.category20c();
+          var color = ['rgb(0,170,170)', 'rgb(0,120,120)'];
           
           $('img').hide();
 
@@ -51,7 +52,7 @@
           var arcs = vis.selectAll("g.slice").data(pie).enter().append("svg:g").attr("class", "slice");
           arcs.append("svg:path")
               .attr("fill", function(d, i){
-                return color(i);
+                return color[i];
               })
               .attr("d", function (d) {
                 // log the result of the arc generator to show how cool it is :)
@@ -60,14 +61,15 @@
               });
 
           // add the text
-          arcs.append("svg:text").attr("transform", function(d){
+          arcs.append("svg:text").attr("font-family", "sans-serif")
+            .attr("font-size", "11px")
+            .attr("fill", "white")
+            .attr("transform", function(d){
               d.innerRadius = 0;
               d.outerRadius = r;
               return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
               return awardData[i].label;}
-              );
-          
-       
+            );
         });
       });
     });
