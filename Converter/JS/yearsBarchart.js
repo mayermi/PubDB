@@ -45,13 +45,12 @@ $(document).ready(function() {
         yeardata = countyears(publicationyears)[1];
 
         $("#publicationyears").text(years[0] + " - " + years[years.length-1]);
-        console.log(years[0] + " - " + years[years.length-1]);
 
         //Width and height
         var w = 500;
-        var h = 100;
+        var h = 150;
         var barPadding = 1;
-      
+
         //Create SVG element
         var svg = d3.select("#barchart")
               .append("svg")
@@ -66,7 +65,7 @@ $(document).ready(function() {
               return i * (w / yeardata.length);
           })
           .attr("y", function(d) {
-              return h - (d * 4);
+              return h - (d * 4) - 24;
           })
           .attr("width", w / yeardata.length - barPadding)
           .attr("height", function(d) {
@@ -89,11 +88,35 @@ $(document).ready(function() {
               return i * (w / yeardata.length) + (w / yeardata.length - barPadding) / 2;
           })
           .attr("y", function(d) {
-              return h - (d * 4) - 9;
+              return h - (d * 4) - 28;
           })
           .attr("font-family", "sans-serif")
           .attr("font-size", "11px")
           .attr("fill", "black");
+
+          
+      //Create scale functions
+      var xScale = d3.scale.linear()
+                 .domain([d3.min(years, function(d) { return d; }), d3.max(years, function(d) { return d; })])
+                 .range([barPadding, w - barPadding * 2]);
+
+      
+      //Define X axis
+      var xAxis = d3.svg.axis()
+                .scale(xScale)
+                .orient("bottom")
+                .ticks(5);
+      
+      
+      //Create X axis
+      svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + (h - 18) +  ")")
+        .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "11px")
+        .call(xAxis);
+     
       });
     });
   });
