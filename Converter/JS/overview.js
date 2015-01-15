@@ -21,35 +21,43 @@
 	
 			for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
 				for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
-					console.log("test");
-					$( "#select" ).append( "<option value='" + publicationsJSON[i].authors[j].name + "'>" + publicationsJSON[i].authors[j].name + "</option>" );
+					$( "#select" ).append( "<option class='option' value='" + publicationsJSON[i].authors[j].name + "'>" + publicationsJSON[i].authors[j].name + "</option>" );
 				
 				}
 			}
+			$('.option').click(function(){
+				alert($('#select').val());
+				author = $('#select').val();
+				showAuthorInformation(author);
+			});
 
+			function showAuthorInformation(author){
 			//End Natalies Code
 
-          var publicationtitles = [];
-          var publicationtitlesLI= [];
+			  var publicationtitles = [];
+			  var publicationtitlesLI= [];
 
-          for (var i = 0, l = authorsJSON.length; i < l; i += 1) {
-            if(authorsJSON[i].name === author){
-              var publications = authorsJSON[i].publications; // Array with all publications
-              for (var j = 0, m = publications.length; j < m; j += 1) {
-                for (var k = 0, n = publicationsJSON.length; k < n; k += 1) {
-                  if(publicationsJSON[k].id === publications[j]) {
-                    publicationtitles.push(publicationsJSON[k].title.name);
-                  }
-                }
-              }
-            }
-          }
+			  for (var i = 0, l = authorsJSON.length; i < l; i += 1) {
+				if(authorsJSON[i].name === author){
+				  var publications = authorsJSON[i].publications; // Array with all publications
+				  for (var j = 0, m = publications.length; j < m; j += 1) {
+					for (var k = 0, n = publicationsJSON.length; k < n; k += 1) {
+					  if(publicationsJSON[k].id === publications[j]) {
+						publicationtitles.push(publicationsJSON[k].title.name);
+					  }
+					}
+				  }
+				}
+			  }
 
-          $.each(publicationtitles, function(i, item) {
-            publicationtitlesLI.push('<li>' + item + '</li>');
-          });  // close each()
-          $('#publicationoverview').append( publicationtitlesLI.join('') );
-
+			  $.each(publicationtitles, function(i, item) {
+				publicationtitlesLI.push('<li>' + item + '</li>');
+			  });  // close each()
+			  $('#publicationoverview').append( publicationtitlesLI.join('') );
+	
+		
+			}
+		
         });
       });
     });
