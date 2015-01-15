@@ -22,7 +22,6 @@
           var w = 400;
           var h = 400;
           var r = h/2;
-          //var color = d3.scale.category20c();
           var color = ['rgb(0,170,170)', 'rgb(0,120,120)'];
           
           $('img').hide();
