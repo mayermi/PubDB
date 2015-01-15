@@ -3,6 +3,8 @@
 	
 		var publicationsJSON = []
 		authorsJSON = [];
+		var nodes = "{'nodes':[";
+		var links;
 	
 		// create a new pubDB json object
 		var converter = new pubDB.json();
@@ -15,11 +17,25 @@
 
 			converter.buildAuthorJSON(pubData, function(authorData) {
 			authorsJSON = authorData;
+			
+			//console.log(publicationsJSON);
 	
 		  var w = 960;    //width
 		  var h = 500     //height
 		  
 		  var color = d3.scale.category20();    //different colours
+		  
+		  for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
+            for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
+              
+			  nodes = nodes + "{'name':'" + publicationsJSON[i].authors[j].name + "','group':" + i + "},";
+			  
+			  
+            }
+          }
+		  
+		  //nodes = nodes + "]}";
+		  console.log(nodes);
 		  
 		  var force = d3.layout.force()     //force-directed layout
 			.charge(-120)           //charge-strength
