@@ -16,6 +16,18 @@
 
         converter.buildAuthorJSON(pubData, function(authorData) {
           authorsJSON = authorData;
+		  
+			//Natalies Code
+	
+			for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
+				for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
+					console.log("test");
+					$( "#select" ).append( "<option value='" + publicationsJSON[i].authors[j].name + "'>" + publicationsJSON[i].authors[j].name + "</option>" );
+				
+				}
+			}
+
+			//End Natalies Code
 
           var publicationtitles = [];
           var publicationtitlesLI= [];
