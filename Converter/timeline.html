@@ -3,12 +3,16 @@
 	<head>
 		<title>PubDB</title>
 		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Nixie+One'>
-		<link rel='stylesheet' href='../CSS/normalize.css'>
-    	<link rel='stylesheet' href='../CSS/style.css'>
+    	<link rel='stylesheet' href='CSS/normalize.css'>
+    	<link rel='stylesheet' href='CSS/style.css'>
+
+    	<script src="jquery1.11.1.js"></script>
+    	<script src="http://d3js.org/d3.v3.min.js"></script>
+    	<script src="pubdb.js"></script>
+		
+		<script src='JS/timeline.js'></script>
 	</head>
 	<body>
-		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 		<header>
 			<nav>
 				<ol>
@@ -40,11 +44,7 @@
 		</div>
 
 		<main>
-			<script src='../JS/timeline.js'></script>
-			<script src='../JS/timeline test.js'></script>
-			<div>
-				<img src="../DATA/img/timeline.png">
-			</div>
+			<div id="timeline"></div>
 		</main>
 	</body>
 <html>
