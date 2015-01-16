@@ -26,14 +26,14 @@
 				}
 			}
 			$('.option').click(function(){
-				alert($('#select').val());
+				//alert($('#select').val());
 				author = $('#select').val();
+				console.log(author);
 				showAuthorInformation(author);
 			});
 
 			function showAuthorInformation(author){
 			//End Natalies Code
-
 			  var publicationtitles = [];
 			  var publicationtitlesLI= [];
 
