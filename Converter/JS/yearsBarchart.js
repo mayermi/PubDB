@@ -2,7 +2,11 @@ $(document).ready(function() {
   var start = new Date();
   var publicationsJSON = []
   authorsJSON = [];
-  var author = "Heinrich Hussmann";
+  
+  // get url info
+  var query = window.location.search.substring(1);
+  var authorname = query.split("=")[1];
+  var author = authorname.replace(/%20/g, ' ');
   
   // create a new pubDB json object
   var converter = new pubDB.json();
@@ -98,14 +102,17 @@ $(document).ready(function() {
       //Create scale functions
       var xScale = d3.scale.linear()
                  .domain([d3.min(years, function(d) { return d; }), d3.max(years, function(d) { return d; })])
-                 .range([barPadding, w - barPadding * 2]);
+                 .range([(w / yeardata.length - barPadding)/2, w - (w / yeardata.length - barPadding)/2]);
 
       
       //Define X axis
       var xAxis = d3.svg.axis()
                 .scale(xScale)
                 .orient("bottom")
-                .ticks(5);
+                .ticks(years.length <= 10 ? years.length: 10)
+                .tickFormat(function(d) {
+                  return d;
+                });;
       
       
       //Create X axis
