@@ -3,7 +3,11 @@
     var start = new Date();
     var publicationsJSON = []
     authorsJSON = [];
-    var author = "Florian Alt";
+
+    // get url info
+    var query = window.location.search.substring(1);
+    var authorname = query.split("=")[1];
+    var author = authorname.replace(/%20/g, ' ');
   
     // create a new pubDB json object
     var converter = new pubDB.json();

@@ -37,7 +37,7 @@
 			  nodes = nodes + "{'name':'" + publicationsJSON[i].authors[j].name + "','group':" + i + "}";
 			  
 			  }
-			 links = links + 
+			 //links = links + 
 			  
             }
           }
