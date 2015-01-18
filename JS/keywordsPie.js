@@ -1,50 +1,80 @@
 (function() {
-// metrics
-var width = 960,
-    height = 500,
-    radius = Math.min(width, height) / 2;
+  $(document).ready(function() {
+    var start = new Date();
+    var publicationsJSON = []
+    authorsJSON = [];
 
-// color
-var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    // get url info
+    var query = window.location.search.substring(1);
+    var authorname = query.split("=")[1];
+    var author = authorname.replace(/%20/g, ' ');
+  
+    // create a new pubDB json object
+    var converter = new pubDB.json();
+ 
+    // initialize -> get a jQuery object of html contents in callback function
+    converter.init(function(dbObject) {
+      // pass dbObject to buildJSON method -> get a json object back (<- created on client side)
+      converter.buildPublicationJSON(dbObject, function(pubData) {
+        publicationsJSON = pubData;
 
-// radius
-var arc = d3.svg.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(0);
+        converter.buildAuthorJSON(pubData, function(authorData) {
+          authorsJSON = authorData;
 
-var pie = d3.layout.pie()
-    .sort(null)
-    .value(function(d) { return d.population; });
+          var countAward = 0;
+          var countNoAward = 0;
+          var w = 400;
+          var h = 400;
+          var r = h/2;
+          var color = ['rgb(0,170,170)', 'rgb(0,120,120)'];
+          
+          $('img').hide();
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+          for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
+            for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
+              if(publicationsJSON[i].authors[j].name === author) {
+                if(publicationsJSON[i].award){
+                  countAward++;
+                } else {
+                  countNoAward++;
+                }
+              }
+            }
+          }
 
-// data. First is lable, second is number for section-radius
-// IS EXAMPLE DATA FOR NOW!!
-d3.csv("../DATA/data.csv", function(error, data) {
+          var awardData = [{"label":"yes", "value":countAward},
+                           {"label":"no", "value":countNoAward}];
 
-  data.forEach(function(d) {
-    d.population = +d.population;
+          var vis = d3.select('#chart').append("svg:svg").data([awardData]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
+          var pie = d3.layout.pie().value(function(d){return d.value;});
+
+          // declare an arc generator function
+          var arc = d3.svg.arc().outerRadius(r);
+
+          // select paths, use arc generator to draw
+          var arcs = vis.selectAll("g.slice").data(pie).enter().append("svg:g").attr("class", "slice");
+          arcs.append("svg:path")
+              .attr("fill", function(d, i){
+                return color[i];
+              })
+              .attr("d", function (d) {
+                // log the result of the arc generator to show how cool it is :)
+                //console.log(arc(d));
+                return arc(d);
+              });
+
+          // add the text
+          arcs.append("svg:text").attr("font-family", "sans-serif")
+            .attr("font-size", "11px")
+            .attr("fill", "white")
+            .attr("transform", function(d){
+              d.innerRadius = 0;
+              d.outerRadius = r;
+              return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
+              return awardData[i].label;}
+            );
+        });
+      });
+    });
   });
-
-  var g = svg.selectAll(".arc")
-      .data(pie(data))
-      .enter().append("g")
-      .attr("class", "arc");
-
-  g.append("path")
-      .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.age); });
-
-  g.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .style("text-anchor", "middle")
-      .text(function(d) { return d.data.age; });
-
-});
 })();

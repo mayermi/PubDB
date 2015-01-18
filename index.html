@@ -9,8 +9,11 @@
 	</head>
 
 	<body>
+		<script src="jquery1.11.1.js"></script>
     	<script src="http://d3js.org/d3.v3.min.js"></script>
-		<script type='text/javascript' src="http://bost.ocks.org/mike/fisheye/fisheye.js?0.0.3"> </script>
+		<script type='text/javascript' src="http://bost.ocks.org/mike/fisheye/fisheye.js?0.0.3"></script>
+		<script src="pubdb.js"></script>
+		
 		
 		<header>
 			<nav>
@@ -19,7 +22,7 @@
 						<a href='index.html'>Network</a>
 					</li>
 					<li>
-						<a href='HTML/timeline.html'>Timeline</a>
+						<a href='timeline.html'>Timeline</a>
 					</li>
 				</ol>
 			</nav>
@@ -31,9 +34,11 @@
 		</header>
 
 		<main>
-      		<script src='Converter/JS/author-network.js'></script>
+      		
 			<h3>Author-Network</h3>
-			<div id="network"></div>
+			<div id="network">
+			<script src='JS/author-network.js'></script>
+			</div>
 		</main>
 	</body>
 <html>
