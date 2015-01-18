@@ -1,127 +1,182 @@
 (function() {
 	$(document).ready(function() {
+
+		 var color = d3.scale.category20();    //different colours
+		 var publicationsJSON = []
+			authorsJSON = [];
+		var nodes = [];
+		var authorDouble = false;
+
+		function myGraph(el){
 	
-		var publicationsJSON = []
-		authorsJSON = [];
-		var nodes = "{'nodes':[";
-		var links;
+			//Add an remove elements on the graph object
+			this.addNode = function(id) {
+				nodes.push({"id":id})
+				update();
+			}
+			
+			this.removeNode = function(id) {
+				var i = 0;
+				var n = findNode(id);
+				while (i < links.length) {
+					if((links[i]['source'] === n)||(links[i]['target'] == n)) links.splice(i,1);
+					else i++;
+				}
+				var idex = findNodeIndex(id);
+				if(index !== undefined) {
+						nodes.splice(index, 1);
+						update();
+				}
+			}
+			
+			this.addLink = function (sourceId, targetId, group) {
+				var sourceNode = findNode(sourceId);
+				var targetNode = findNode(targetId);
+				
+				if ((sourceNode !== undefined) && (targetNode !== undefined)) {
+					links.push({"source": sourceNode, "target": targetNode, "group": group});
+					update();
+				}
+			}
+			
+			var findNode = function(id) {
+				for (var i=0; i < nodes.length; i++) {
+					if (nodes[i].id === id)
+						return nodes[i]
+				};
+			}
+			
+			//set up the D3 visualisation in the specified element
+			var w = $(el).innerWidth(),
+				h = $(el).innerHeight();
+				
+				
+			var vis = this.vis = d3.select(el).append("svg:svg")
+				.attr("width", w)
+				.attr("height", h);
+
+				
+			var force = d3.layout.force()
+				.gravity(.05)
+				.distance(100)
+				.charge(-100)
+				.size([w, h]);
+				
+			var nodes = force.nodes()
+				links = force.links();
+				
+			var update = function () {
+
+				var link = vis.selectAll("line.link")
+					.data(links, function(d) {return d.source.id + "-" + d.target.id;})
+					.style("fill", function(d) {
+						return color(d.group);
+					});
+					
+				link.enter().insert("line")
+					.attr("class", "link");
+					
+					
+				link.exit().remove();
+			
+			var node = vis.selectAll("g.node")
+				.data(nodes, function(d) {return d.id;})
+				.on("mouseup", function(d) {return authorClicked(d.id);});
+				
+			var nodeEnter = node.enter().append("g")
+				.attr("class", "node")
+				.call(force.drag);
+				
+				
+			nodeEnter.append("circle")
+				.attr("class", "circle")
+				.attr("r", 5)
+				.attr("x", "-8px")
+				.attr("y", "-8px")
+				.attr("width", "16px")
+				.attr("height", "16px")
+				.style("fill", "black");
+				
+			nodeEnter.append("text")
+				.attr("class", "nodetext")
+				.attr("dx", 12)
+				.attr("dy", ".35em")
+				.text(function(d) {return d.id});
+			
+			node.exit().remove();
+			
+			force.on("tick", function() {
+			
+				link.attr("x1", function(d) {return d.source.x;})
+					.attr("y1", function(d) {return d.source.y;})
+					.attr("x2", function(d) {return d.target.x;})
+					.attr("y2", function(d) {return d.target.y;});
+					
+				node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
+			
+				});
+			
+			//Restart the force layout.
+			force.start();
+			
+			}
+		
+		//Make it all go
+		update();
+		}
+		
+		function authorClicked (id) {
+				// FEHLT: Übertragung welcher Autor geladen wird! -> Id wird übergeben!
+				location.replace("../HTML/author.html");
+		};
 	
+		graph = new myGraph("#graph");
+		
 		// create a new pubDB json object
 		var converter = new pubDB.json();
- 
+
 		// initialize -> get a jQuery object of html contents in callback function
 		converter.init(function(dbObject) {
-		// pass dbObject to buildJSON method -> get a json object back (<- created on client side)
+			// pass dbObject to buildJSON method -> get a json object back (<- created on client side)
 			converter.buildPublicationJSON(dbObject, function(pubData) {
-			publicationsJSON = pubData;
+				publicationsJSON = pubData;
 
-			converter.buildAuthorJSON(pubData, function(authorData) {
-			authorsJSON = authorData;
-			
-			//console.log(publicationsJSON);
-	
-		  var w = 960;    //width
-		  var h = 500     //height
-		  
-		  var color = d3.scale.category20();    //different colours
-		  
-		  for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
-            for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
-              
-			  if (i < (l-1)){
-			  
-			  nodes = nodes + "{'name':'" + publicationsJSON[i].authors[j].name + "','group':" + i + "},";
-			  
-			  } else {
-			  
-			  nodes = nodes + "{'name':'" + publicationsJSON[i].authors[j].name + "','group':" + i + "}";
-			  
-			  }
-			 //links = links + 
-			  
-            }
-          }
-		  
-		  nodes = nodes + "]}";
-		  console.log(nodes);
-		  
-		  var force = d3.layout.force()     //force-directed layout
-			.charge(-120)           //charge-strength
-			.linkDistance(30)         //target distance between linked nodes
-			.size([w, h]);            //layout size
-			
-		  var svg = d3.select("body").append("svg")
-			.attr("width", w)
-			.attr("height", h);
-			
-		  d3.json("./DATA/authorsTest.json", function (error, graph) { //get data from "authorsTest.json"
-			force                       //callback?
-			  .nodes(graph.nodes)
-			  .links(graph.links)
-			  .start();           //start or restart the simulation when the nodes change
-			  
-			var link = svg.selectAll(".link")
-			  .data(graph.links)
-			  .enter().append("line")
-			  .attr("class", "link")
-			  .style("stroke-width", function (d){return Math.sqrt(d.value); });
-				
-			var node = svg.selectAll(".node")
-			  .data(graph.nodes)
-			  .enter().append("circle")
-			  .attr("class", "nodes")
-			  .attr("r", 5)
-			  .on("mouseup", authorClicked)
-			  .style("fill", function(d) {
-				return color(d.group);
-				})
-			  .call(force.drag);
-			  
-			node.append("title")
-			  .text(function (d) {return d.name;});
-				
-				
-			force.on("tick", function() {   //listen to updates in the computed layout positions
-			  link.attr("x1", function (d) { return d.source.x; })
-			  .attr("y1", function (d) { return d.source.y; })
-			  .attr("x2", function (d) { return d.target.x; })
-			  .attr("y2", function (d) {return d.target.y });
-			  
-			node.attr("cx", function (d) {return d.x;})
-			  .attr("cy", function (d) {return d.y});
-			  });
-			  
-			  
-			 //fisheye
-		  
-			var fisheye = d3.fisheye.circular()
-			  .radius(120)
-			  .distortion(2);
-			  
-			svg.on("mousemove", function(){
-				fisheye.focus(d3.mouse(this));
-				
-				node.each(function(d) { d.fisheye = fisheye(d); })
-				.attr("cx", function(d) { return d.fisheye.x; })
-				.attr("cy", function(d) { return d.fisheye.y; })
-				.attr("r", function(d) { return d.fisheye.z * 4.5; });
+				converter.buildAuthorJSON(pubData, function(authorData) {
+					authorsJSON = authorData;
 
-				link.attr("x1", function(d) { return d.source.fisheye.x; })
-				.attr("y1", function(d) { return d.source.fisheye.y; })
-				.attr("x2", function(d) { return d.target.fisheye.x; })
-				.attr("y2", function(d) { return d.target.fisheye.y; });
+		  
+					for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
+						for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
+							
+							//add Nodes
+							node = publicationsJSON[i].authors[j].name;
+
+								for(var k=0; k<=nodes.length; k++) {
+									if(node == nodes[i]) {					
+									authorDouble = true;
+									}
+								}
+								
+								if (authorDouble !== true) {
+
+									nodes.push(node);
+									graph.addNode(node);
+									authorDouble = false;
+								}
+								
+								//add links
+								if (j == 0) {
+									var link1 = node;
+								} else {	
+									var link2 = node;
+									graph.addLink(link1, link2, i);
+								} 
+						}			  
+					}
+					doAutocomplete(nodes);
+				});
 			});
-			  
-			  
-		  });
-		  
-		  function authorClicked () {
-				// FEHLT: Übertragung welcher Autor geladen wird!
-				location.replace("HTML/author.html");
-			  };
-		  
-	        });
-      });
-    });
+		 });	
+
 	});
 })();
