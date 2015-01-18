@@ -23,19 +23,19 @@
 		  
 			//Natalies Code
 	
-			// for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
-			// 	for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
-			// 		$( "#select" ).append( "<option class='option' value='" + publicationsJSON[i].authors[j].name + "'>" + publicationsJSON[i].authors[j].name + "</option>" );
+			for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
+				for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
+					$( "#select" ).append( "<option class='option' value='" + publicationsJSON[i].authors[j].name + "'>" + publicationsJSON[i].authors[j].name + "</option>" );
 				
-			// 	}
-			// }
-			// $('.option').click(function(){
-			// 	alert($('#select').val());
-			// 	author = $('#select').val();
-			// 	showAuthorInformation(author);
-			// });
+				}
+			}
+			$('.option').click(function(){
+				alert($('#select').val());
+				author = $('#select').val();
+				showAuthorInformation(author);
+			});
 
-			// function showAuthorInformation(author){
+			function showAuthorInformation(author){
 			//End Natalies Code
 
 			  var publicationtitles = [];
