@@ -1,77 +1,135 @@
-(function() {
+(function(location) {
+  $(document).ready(function() {
+    var start = new Date();
+    var publicationsJSON = []
+    authorsJSON = [];
+    var author = "Heinrich Hussmann";
+  
+    // create a new pubDB json object
+    var converter = new pubDB.json();
+ 
+    // initialize -> get a jQuery object of html contents in callback function
+    converter.init(function(dbObject) {
+      // pass dbObject to buildJSON method -> get a json object back (<- created on client side)
+      converter.buildPublicationJSON(dbObject, function(pubData) {
+        publicationsJSON = pubData;
 
-var margin = {top: 40, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+        converter.buildAuthorJSON(pubData, function(authorData) {
+          authorsJSON = authorData;
 
-	var formatPercent = d3.format(".0%");
+          var years = [];
+          var authorgroups = [];
+          var authororder = [];
+          var dataset = [];
+          var data = [];
+          var publicationauthors = [];
 
-	var x = d3.scale.ordinal()				//construct an ordinal scale.
-		.rangeRoundBands([0, width], .1);	//divide a continuous output range for discrete bands
+          for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
+            publicationauthors.push([publicationsJSON.id, publicationsJSON.authors]);
+          };
 
-	var y = d3.scale.linear()
-		.range([height, 0]);
 
-	var xAxis = d3.svg.axis()
-		.scale(x)
-		.orient("bottom");
 
-	var yAxis = d3.svg.axis()
-		.scale(y)
-		.orient("left")
-		.tickFormat(formatPercent);
+          for (var i = 0, l = authorsJSON.length; i < l; i += 1) {
+            //if(authorsJSON[i].name === author){
+              var publications = authorsJSON[i].publications; // Array with all publications
+              for (var j = 0, m = publications.length; j < m; j += 1) {
+                for (var k = 0, n = publicationsJSON.length; k < n; k += 1) {
+                  if(publicationsJSON[k].id === publications[j]) {
+                    var year = Number(publicationsJSON[k].year);
+                    years.push(year);
+                    dataset.push([year, publicationsJSON[k].authors.length, authorsJSON[i].name]);
+                  }
+                }
+              }
+            //}
+          }
 
-	var tip = d3.tip()
-	  .attr('class', 'd3-tip')
-	  .offset([-10, 0])
-	  .html(function(d) {
-		return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
-	  })
+          //Width and height
+          var w = 500;
+          var h = 200;
+          var barPadding = 20;
 
-	var svg = d3.select("body").append("svg")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-	  .append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          years = countyears(years)[0];
+            var yearsdiff = years[years.length-1] - years[0];
+            var yearsscale = (w-2*barPadding)/yearsdiff;
 
-	svg.call(tip);
+          //Create SVG element
+          var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
 
-	d3.tsv("../DATA/timelineData.tsv", type, function(error, data) {
-	  x.domain(data.map(function(d) { return d.letter; }));
-	  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+          svg.selectAll("circle")
+            .data(dataset)
+            .enter()
+            .append("a")
+            // !!!!! nächste 2 Zeilen für Link!!!!!
+            .attr("xlink:href", function(d) {return "author.html?name=" + d[2]})
+            .append("circle")
+            .attr("cx", function(d) {
+              return (d[0] - years[0]) * yearsscale + barPadding ;
+            })
+            .attr("cy", function(d) {
+              return d[1]* 12;
+            })
+            .attr("r", 5);
 
-	  svg.append("g")
-		  .attr("class", "x axis")
-		  .attr("transform", "translate(0," + height + ")")
-		  .call(xAxis);
+          // svg.selectAll("circle")
+          //   .data(years)
+          //   .enter()
+          //   .append("circle")
+          //   .attr("cx", function(d) {
+          //     return (d - years[0]) * yearsscale + barPadding ;
+          //   })
+          //   .attr("cy", function(d) {
+          //     return 15;
+          //   })
+          //   .attr("r", 2);
 
-	  svg.append("g")
-		  .attr("class", "y axis")
-		  .call(yAxis)
-		.append("text")
-		  .attr("transform", "rotate(-90)")
-		  .attr("y", 6)
-		  .attr("dy", ".71em")
-		  .style("text-anchor", "end")
-		  .text("Frequency");
+          //Create scale functions
+          var xScale = d3.scale.linear()
+            .domain([d3.min(years, function(d) { return d; }), d3.max(years, function(d) { return d; })])
+            .range([barPadding, w - barPadding]);
 
-	  svg.selectAll(".bar")
-		  .data(data)
-		.enter().append("rect")
-		  .attr("class", "bar")
-		  .attr("x", function(d) { return x(d.letter); })
-		  .attr("width", x.rangeBand())
-		  .attr("y", function(d) { return y(d.frequency); })
-		  .attr("height", function(d) { return height - y(d.frequency); })
-		  //.attr("xlink:href", function(d) {console.log("test"); return "www.google.de";})		//funktioniert nicht
-		  .on('mouseover', tip.show)
-		  .on('mouseout', tip.hide)
+          //Define X axis
+          var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom")
+            .ticks(years.length <= 10 ? years.length: 10)
+            .tickFormat(function(d) {
+              return d;
+            });
+      
+          //Create X axis
+          svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + (h - 18) +  ")")
+            .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "11px")
+            .call(xAxis);
+        });
+      });
+    });
+  });
+  
+  function countyears(arr) {
+          var a = [], b = [], prev;
 
-	});
+          arr.sort();
+          for(var i = 0; i < arr.length; i++) {
+            if(arr[i] !== prev ) {
+              a.push(arr[i]);
+              b.push(1);
+            } else {
+              b[b.length-1]++;
+            }
+            prev = arr[i];
+          }
+          var c = a.map(Number);
 
-	function type(d) {
-	  d.frequency = +d.frequency;
-	  return d;
-	}
-	
-})();
+          var array = [a, b];
+          return array;
+        }
+})(window.location);
