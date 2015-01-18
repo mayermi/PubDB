@@ -85,7 +85,9 @@
 				
 			var nodeEnter = node.enter().append("g")
 				.attr("class", "node")
-				.call(force.drag);
+				.call(force.drag)
+				.append("a")
+            	.attr("xlink:href", function(d) {return "author.html?name=" + d.id});
 				
 				
 			nodeEnter.append("circle")
