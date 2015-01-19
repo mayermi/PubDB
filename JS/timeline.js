@@ -3,7 +3,7 @@
     var start = new Date();
     var publicationsJSON = []
     authorsJSON = [];
-    var author = "Heinrich Hussmann";
+    var author = "Florian Alt";
   
     // create a new pubDB json object
     var converter = new pubDB.json();
@@ -18,41 +18,33 @@
           authorsJSON = authorData;
 
           var years = [];
-          var authorgroups = [];
-          var authororder = [];
           var dataset = [];
-          var data = [];
-          var publicationauthors = [];
+          var coauthors = [];
 
           for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
-            publicationauthors.push([publicationsJSON.id, publicationsJSON.authors]);
-          };
-
-
-
-          for (var i = 0, l = authorsJSON.length; i < l; i += 1) {
-            //if(authorsJSON[i].name === author){
-              var publications = authorsJSON[i].publications; // Array with all publications
-              for (var j = 0, m = publications.length; j < m; j += 1) {
-                for (var k = 0, n = publicationsJSON.length; k < n; k += 1) {
-                  if(publicationsJSON[k].id === publications[j]) {
-                    var year = Number(publicationsJSON[k].year);
-                    years.push(year);
-                    dataset.push([year, publicationsJSON[k].authors.length, authorsJSON[i].name]);
-                  }
-                }
+            for (var j = 0, k = publicationsJSON[i].authors.length; j < k; j += 1) {
+              if(publicationsJSON[i].authors[j].name === author){
+                var year = Number(publicationsJSON[i].year);
+                years.push(year);
+                coauthors.push([year, publicationsJSON[i].authors]);
               }
-            //}
+            }
           }
 
-          //Width and height
-          var w = 500;
-          var h = 200;
-          var barPadding = 20;
+          // get info for circle x and y
+          var data = addupyears(coauthors);
+          data = allauthorslisted(data);
 
           years = countyears(years)[0];
-            var yearsdiff = years[years.length-1] - years[0];
-            var yearsscale = (w-2*barPadding)/yearsdiff;
+
+          //Width and height
+          var w = years.length * 100 + 100;
+          var h = getheight(data) * 26;
+          var barPadding = 20;
+
+          // create relative scale
+          var yearsdiff = years[years.length-1] - years[0];
+          var yearsscale = ((w-100)-2*barPadding)/yearsdiff;
 
           //Create SVG element
           var svg = d3.select("body")
@@ -60,37 +52,61 @@
             .attr("width", w)
             .attr("height", h);
 
+          data.forEach(function(entry){
+            svg.append("line")
+              .attr("x1", (entry[0] - years[0]) * yearsscale + barPadding)  //<<== change your code here
+              .attr("y1", 0 + 10)
+              .attr("x2", (entry[0] - years[0]) * yearsscale + barPadding)  //<<== and here
+              .attr("y2", h - 18)
+              .style("stroke-width", 2)
+              .style("stroke", "rgb(0,120,120)")
+              .style("fill", "none");
+          });
+
           svg.selectAll("circle")
-            .data(dataset)
+            .data(data)
             .enter()
             .append("a")
-            // !!!!! nächste 2 Zeilen für Link!!!!!
-            .attr("xlink:href", function(d) {return "author.html?name=" + d[2]})
+            .attr("xlink:href", function(d) {
+              if(d[3] > 5 && d[4] > 5) {
+                return "timeline.html";
+              } else {
+                return "author.html?name=" + d[2];
+              }
+              })
             .append("circle")
             .attr("cx", function(d) {
-              return (d[0] - years[0]) * yearsscale + barPadding ;
+              if(d[3] > 5 && d[4] > 5) {
+                return (d[0] - years[0]) * yearsscale + barPadding + 10*6.5 ;
+              } else {
+                return (d[0] - years[0]) * yearsscale + barPadding + 10*d[4] ;
+              }
             })
             .attr("cy", function(d) {
-              return d[1]* 12;
+              return d[1] * 14;
             })
-            .attr("r", 5);
-
-          // svg.selectAll("circle")
-          //   .data(years)
-          //   .enter()
-          //   .append("circle")
-          //   .attr("cx", function(d) {
-          //     return (d - years[0]) * yearsscale + barPadding ;
-          //   })
-          //   .attr("cy", function(d) {
-          //     return 15;
-          //   })
-          //   .attr("r", 2);
+            .attr("r", function(d) {
+              if(d[3] > 5 && d[4] > 5) {
+                return 7;
+              } else {
+                return 5;
+              }
+            })
+            .attr("fill", function(d, i){
+              if(d[3] > 5 && d[4] > 5) {
+                return "rgb(0,170,170)";
+              } else if(d[2] === author) {
+                return "rgb(170,0,170)";
+              }
+               else {
+                return "rgb(0,0,0)";
+              }
+            });
 
           //Create scale functions
           var xScale = d3.scale.linear()
             .domain([d3.min(years, function(d) { return d; }), d3.max(years, function(d) { return d; })])
-            .range([barPadding, w - barPadding]);
+            .range([barPadding, (w-100) - barPadding]);
 
           //Define X axis
           var xAxis = d3.svg.axis()
@@ -113,23 +129,61 @@
       });
     });
   });
-  
+
+  function addupyears(arr) {
+    var a = [], b = [], c = 0, prev;
+
+
+    for(var i = 0; i < arr.length; i++) {
+      if(arr[i][0] !== prev ) {
+        c = 1;
+        a.push([parseInt(arr[i][0]), c, arr[i][1]]);
+      } else {
+        c++;
+        a.push([parseInt(arr[i][0]), c, arr[i][1]]);
+      }
+      prev = arr[i][0];
+    }
+
+    return a;
+  }
+
+  function allauthorslisted(arr) {     
+    var a = [];
+
+    for(var i = 0; i < arr.length; i++) {
+      for(var j = 0; j < arr[i][2].length; j++) {
+        a.push([arr[i][0], arr[i][1], arr[i][2][j].name, arr[i][2].length, j]);
+      }
+    }
+
+    return a;
+  }
+
   function countyears(arr) {
-          var a = [], b = [], prev;
+    var a = [], b = [], prev;
 
-          arr.sort();
-          for(var i = 0; i < arr.length; i++) {
-            if(arr[i] !== prev ) {
-              a.push(arr[i]);
-              b.push(1);
-            } else {
-              b[b.length-1]++;
-            }
-            prev = arr[i];
-          }
-          var c = a.map(Number);
+    arr.sort();
+    for(var i = 0; i < arr.length; i++) {
+      if(arr[i] !== prev ) {
+        a.push(arr[i]);
+        b.push(1);
+      } else {
+        b[b.length-1]++;
+      }
+      prev = arr[i];
+    }
+    var c = a.map(Number);
 
-          var array = [a, b];
-          return array;
-        }
+    var array = [a, b];
+    return array;
+  }
+
+  function getheight(arr) {
+    var a = [];
+    for(var i = 0; i < arr.length; i++) {
+      a.push(arr[i][1]);
+    }
+    return Math.max.apply(null, a);
+  }
 })(window.location);
