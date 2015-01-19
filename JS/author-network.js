@@ -59,7 +59,7 @@
 			var force = d3.layout.force()
 				.gravity(.05)
 				.distance(100)
-				.charge(-100)
+				.charge(-8)
 				.size([w, h]);
 				
 			var nodes = force.nodes()
@@ -80,8 +80,7 @@
 				link.exit().remove();
 			
 			var node = vis.selectAll("g.node")
-				.data(nodes, function(d) {return d.id;})
-				.on("mouseup", function(d) {return authorClicked(d.id);});
+				.data(nodes, function(d) {return d.id;});
 				
 			var nodeEnter = node.enter().append("g")
 				.attr("class", "node")
@@ -97,13 +96,18 @@
 				.attr("y", "-8px")
 				.attr("width", "16px")
 				.attr("height", "16px")
-				.style("fill", "black");
+				.attr("fill", function(){
+                	return 'rgb(0,120,120)';
+     			});
 				
 			nodeEnter.append("text")
 				.attr("class", "nodetext")
 				.attr("dx", 12)
 				.attr("dy", ".35em")
-				.text(function(d) {return d.id});
+				.text(function(d) {return d.id})
+				.attr("font-family", "sans-serif")
+          		.attr("font-size", "11px")
+          		.attr("fill", "black");
 			
 			node.exit().remove();
 			
@@ -126,11 +130,6 @@
 		//Make it all go
 		update();
 		}
-		
-		function authorClicked (id) {
-				// FEHLT: Übertragung welcher Autor geladen wird! -> Id wird übergeben!
-				location.replace("../HTML/author.html");
-		};
 	
 		graph = new myGraph("#graph");
 		
@@ -145,7 +144,6 @@
 
 				converter.buildAuthorJSON(pubData, function(authorData) {
 					authorsJSON = authorData;
-
 		  
 					for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
 						for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
@@ -153,9 +151,9 @@
 							//add Nodes
 							node = publicationsJSON[i].authors[j].name;
 
-								for(var k=0; k<=nodes.length; k++) {
-									if(node == nodes[i]) {					
-									authorDouble = true;
+								for(var k=0; k<nodes.length; k++) {
+									if(node == nodes[k]) {					
+										authorDouble = true;
 									}
 								}
 								
@@ -163,6 +161,8 @@
 
 									nodes.push(node);
 									graph.addNode(node);
+									authorDouble = false;
+								} else {
 									authorDouble = false;
 								}
 								
@@ -175,7 +175,7 @@
 								} 
 						}			  
 					}
-					doAutocomplete(nodes);
+					//doAutocomplete(nodes);
 				});
 			});
 		 });	
