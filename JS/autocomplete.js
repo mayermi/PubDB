@@ -30,6 +30,7 @@ function doAutocomplete(nodesAutocomplete){
 		console.log("c = " + c);
 		if (typeof this.selectionStart !== "undefined"){
 			if (this.selectionStart != this.selectionEnd && c === this.value.substr(this.selectionStart, 1)){
+				console.log("selelectionStart");
 				this.selectionStart++;
 				ev.preventDefault();
 				return false;
@@ -37,6 +38,7 @@ function doAutocomplete(nodesAutocomplete){
 		}
 		else {
 			var range = document.selection.createRange();
+				console.log("createRange");
 			if (c === range.text.substr(0, 1)){
 				range.moveStart("character", 1);
 				range.select();

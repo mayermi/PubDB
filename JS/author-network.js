@@ -68,10 +68,7 @@
 			var update = function () {
 
 				var link = vis.selectAll("line.link")
-					.data(links, function(d) {return d.source.id + "-" + d.target.id;})
-					.style("fill", function(d) {
-						return color(d.group);
-					});
+					.data(links, function(d) {return d.source.id + "-" + d.target.id;});
 					
 				link.enter().insert("line")
 					.attr("class", "link");
@@ -96,9 +93,13 @@
 				.attr("y", "-8px")
 				.attr("width", "16px")
 				.attr("height", "16px")
-				.attr("fill", function(){
-                	return 'rgb(0,120,120)';
-     			});
+				.attr("fill", function(d) {
+						return color(d.group);
+				});
+				//.attr("fill", function(){
+                //	return 'rgb(0,120,120)';
+     			//})
+				
 				
 			nodeEnter.append("text")
 				.attr("class", "nodetext")
@@ -175,7 +176,7 @@
 								} 
 						}			  
 					}
-					//doAutocomplete(nodes);
+					doAutocomplete(nodes);
 				});
 			});
 		 });	
