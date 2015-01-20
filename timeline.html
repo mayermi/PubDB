@@ -25,23 +25,26 @@
 				</ol>
 			</nav>
 
-			<form>
-				<input type='search' id="searchAuthor" placeholder='Author'>
+			<form method='get'>
+				<input type='search' id="searchAuthor" name='search' placeholder='Author'>
 				<button type='submit'>search</button>
 			</form>
 		</header>
 
 		<main>
+			<h2 id='please'>Please search an author</h2>
+			<h2 id='authortitle'></h2>
 			<div id="timeline"></div>
 
 			<form action="">
-				<input type="checkbox" id="wonaward">Only show award winning constellations<br>
+				<input type="checkbox" id="wonaward">
+				<label for='wonaward'>Only show award winning constellations</label>
 			</form>
-			<p>Begin in year</p>
+			<h3>Begin in year</h3>
 			<input type='search' id="begininyear" placeholder='1990'>
 			<button id='beginyearbutton'>adapt graph</button>
 			
-			<p>End in year</p>
+			<h3>End in year</h3>
 			<input type='search' id="endinyear" placeholder='2015'>
 			<button id="endyearbutton">adapt graph</button>
 			
