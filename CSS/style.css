@@ -32,14 +32,15 @@ form {
    margin-bottom: 1.2em;
 }
 
-form > button {
+button {
    border-bottom-left-radius: 0;
    border-top-left-radius: 0;
 }
 
-form > input[type='search'] {
-   border-bottom-right-radius: 0;
-   border-top-right-radius: 0;
+form > input[type='checkbox'] {
+   font-size: 162.5%;
+   margin-right: 7px;
+   margin-bottom: 0.6em; 
 }
 
 img {
@@ -56,6 +57,12 @@ input[type='search'] {
    font-size: 1.6em;
    line-height: 1.5em;
    padding: 0.3125em 0.625em;
+   border-bottom-right-radius: 0;
+   border-top-right-radius: 0;
+}
+
+label {
+   font-size: 122.5%
 }
 
 nav {
@@ -89,5 +96,7 @@ nav > ol > li {
    }
 }
 
-
+svg {
+   margin-bottom: 1.8em;
+}
 

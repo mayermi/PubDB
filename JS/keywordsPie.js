@@ -21,10 +21,22 @@
         converter.buildAuthorJSON(pubData, function(authorData) {
           authorsJSON = authorData;
 
+          for (var p = 0, q = authorsJSON.length; p < q; p += 1) {
+            if(authorsJSON[p].name === author) {
+              correctAuthor = true;
+            }
+          }
+
+          if (correctAuthor) {
+            $('#authortitle').text(author);
+          } else {
+            $('#authortitle').text('No author with this name is in our dataset. Please try again.');
+          }
+
           var countAward = 0;
           var countNoAward = 0;
-          var w = 400;
-          var h = 400;
+          var w = 150;
+          var h = 150;
           var r = h/2;
           var color = ['rgb(0,170,170)', 'rgb(0,120,120)'];
           
@@ -64,7 +76,8 @@
               });
 
           // add the text
-          arcs.append("svg:text").attr("font-family", "sans-serif")
+          arcs.append("svg:text")
+            .attr("font-family", "sans-serif")
             .attr("font-size", "11px")
             .attr("fill", "white")
             .attr("transform", function(d){

@@ -3,7 +3,13 @@
     var start = new Date();
     var publicationsJSON = []
     authorsJSON = [];
-    var author = "Heinrich Hussmann";
+    //var author = "Heinrich Hussmann";
+    // get url info
+    var query = window.location.search.substring(1);
+    var authorname = query.split("=")[1];
+    var author = authorname.replace(/\+/g, ' ');
+
+    $('#please').hide();
   
     // create a new pubDB json object
     var converter = new pubDB.json();
@@ -20,6 +26,19 @@
           var years = [];
           var dataset = [];
           var coauthors = [];
+          var correctAuthor = false;
+
+          for (var p = 0, q = authorsJSON.length; p < q; p += 1) {
+            if(authorsJSON[p].name === author) {
+              correctAuthor = true;
+            }
+          }
+
+          if (correctAuthor) {
+            $('#authortitle').text(author);
+          } else {
+            $('#authortitle').text('No author with this name is in our dataset. Please try again.');
+          }
 
           for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
             for (var j = 0, k = publicationsJSON[i].authors.length; j < k; j += 1) {
