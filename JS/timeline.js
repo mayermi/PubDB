@@ -37,10 +37,13 @@
 
           years = countyears(years)[0];
 
+          //Set placeholders yearfilters
+          $('#begininyear').attr('placeholder',years[0]);
+          $('#endinyear').attr('placeholder',years[years.length-1]);
+
           //Width and height
           var w = years.length * 100 + 100;
           var h = getheight(data) * 26;
-
 
           //Create SVG element
           var svg = d3.select("#timeline")
@@ -67,6 +70,48 @@
               svg.selectAll("*").remove();
               buildSVG(svg, w, h, years, newdata, author);
             }
+          });
+
+          $('#beginyearbutton').click(function(){
+              var newyears = [], newfiltereddata = [];
+              var input = $('#begininyear').val();
+              console.log(input);
+              for (var i = 0, l = years.length; i < l; i += 1) {
+                if(years[i] >= input) {
+                  newyears.push(years[i]);
+                }
+              }
+              for (var i = 0, l = newdata.length; i < l; i += 1) {
+                if(newdata[i][0] >= input) {
+                  newfiltereddata.push(newdata[i]);
+                }
+              }
+              svg.selectAll("*").remove();
+              var w = newyears.length * 100 + 100;
+              var h = getheight(newfiltereddata) * 26;
+              buildSVG(svg, w, h, newyears, newfiltereddata, author);
+          });
+
+          $('#endyearbutton').click(function(){
+              var newyears = [], newfiltereddata = [];
+              var input = $('#endinyear').val();
+              console.log(input);
+              for (var i = 0, l = years.length; i < l; i += 1) {
+                if(years[i] <= input) {
+                  newyears.push(years[i]);
+                }
+              }
+              for (var i = 0, l = newdata.length; i < l; i += 1) {
+                if(newdata[i][0] <= input) {
+                  newfiltereddata.push(newdata[i]);
+                }
+              }
+              svg.selectAll("*").remove();
+              var w = newyears.length * 100 + 100;
+              var h = getheight(newfiltereddata) * 26;
+              svg.attr('width', w);
+              svg.attr('height', h)
+              buildSVG(svg, w, h, newyears, newfiltereddata, author);
           });
         });
       });
