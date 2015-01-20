@@ -3,6 +3,7 @@
     var start = new Date();
     var publicationsJSON = []
     authorsJSON = [];
+	var names = [];
 
     // get url info
     var query = window.location.search.substring(1);
@@ -20,11 +21,11 @@
 
         converter.buildAuthorJSON(pubData, function(authorData) {
           authorsJSON = authorData;
-		  
-			//Natalies Code
+
 	
 			for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
 				for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
+					names.push(publicationsJSON[i].authors[j].name);
 					$( "#select" ).append( "<option class='option' value='" + publicationsJSON[i].authors[j].name + "'>" + publicationsJSON[i].authors[j].name + "</option>" );
 				
 				}
@@ -35,9 +36,14 @@
 				console.log(author);
 				showAuthorInformation(author);
 			});
+			
+			console.log("beforeAutocomplete");
+			doAutocomplete(names);
+			console.log("afterAutocomplete");
+
 
 			function showAuthorInformation(author){
-			//End Natalies Code
+			
 			  var publicationtitles = [];
 			  var publicationtitlesLI= [];
 
