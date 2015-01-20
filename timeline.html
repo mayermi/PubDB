@@ -25,26 +25,26 @@
 				</ol>
 			</nav>
 
-			<button>Filters</button>
+			<form>
+				<input type='search' id="searchAuthor" placeholder='Author'>
+				<button type='submit'>search</button>
+			</form>
 		</header>
-		
-		<form>
-			<input type='search' placeholder='Author'>
-			<button type='submit'>search</button>
-		</form>
-
-		<form>
-			<input type='search' placeholder='Keyword'>
-			<button type='submit'>search</button>
-		</form>
-
-		<div>
-			<h2>Years</h2>
-			<input type="range" id="slider" min="1910" max="2014" value="25" />
-		</div>
 
 		<main>
 			<div id="timeline"></div>
+
+			<form action="">
+				<input type="checkbox" id="wonaward">Only show award winning constellations<br>
+			</form>
+			<form>
+				<p>Begin in year</p>
+				<input type='search' id="searchAuthor" placeholder='1990'>
+			</form>
+			<form>
+				<p>End in year</p>
+				<input type='search' id="searchAuthor" placeholder='2015'>
+			</form>
 		</main>
 	</body>
 <html>
