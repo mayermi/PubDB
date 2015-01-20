@@ -3,6 +3,7 @@
     var start = new Date();
     var publicationsJSON = []
     authorsJSON = [];
+	var correctAuthor;
 
     // get url info
     var query = window.location.search.substring(1);
@@ -23,6 +24,7 @@
 
           for (var p = 0, q = authorsJSON.length; p < q; p += 1) {
             if(authorsJSON[p].name === author) {
+			console.log("correctAuthor");
               correctAuthor = true;
             }
           }

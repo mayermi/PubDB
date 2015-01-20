@@ -27,6 +27,7 @@
           var dataset = [];
           var coauthors = [];
           var correctAuthor = false;
+		  var names = [];
 
           for (var p = 0, q = authorsJSON.length; p < q; p += 1) {
             if(authorsJSON[p].name === author) {
@@ -42,13 +43,19 @@
 
           for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
             for (var j = 0, k = publicationsJSON[i].authors.length; j < k; j += 1) {
-              if(publicationsJSON[i].authors[j].name === author){
-                var year = Number(publicationsJSON[i].year);
-                years.push(year);
-                coauthors.push([year, publicationsJSON[i].authors, publicationsJSON[i].award]);
-              }
+			
+				names.push(publicationsJSON[i].authors[j].name);
+
+				if(publicationsJSON[i].authors[j].name === author){
+					var year = Number(publicationsJSON[i].year);
+					years.push(year);
+					coauthors.push([year, publicationsJSON[i].authors, publicationsJSON[i].award]);
+				}
             }
           }
+		  
+			//autocomplete-function
+			doAutocomplete(names);
 
           // get info for circle x and y
           var data = addupyears(coauthors);

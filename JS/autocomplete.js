@@ -1,11 +1,13 @@
 
 function doAutocomplete(nodesAutocomplete){
-
+	console.log("doAutocomplete");
 	function getAutocomplete(value){
+		
 		var values = nodesAutocomplete;
 		console.log("values = " + values);
 		var found = [];
 		for (var i = 0; i < values.length; i++){
+			
 			if (values[i].substring(0, value.length) === value){
 				found.push(values[i]);
 			}
@@ -15,11 +17,9 @@ function doAutocomplete(nodesAutocomplete){
 
 	var input = document.getElementById("searchAuthor");
 	var oldValue = input.value;
-	console.log("oldValue = " + oldValue);
 	
 	input.onkeydown = function(ev){
 		oldValue = this.value;
-		console.log("Input = " + oldValue);
 	};
 
 	input.onkeypress = function(ev){
@@ -28,11 +28,8 @@ function doAutocomplete(nodesAutocomplete){
 		}
 		var c = String.fromCharCode(ev.charCode || ev.keyCode);
 		
-		console.log("c = " + c);
 		if (typeof this.selectionStart !== "undefined"){
-			console.log("selectionStart !== undefined");
 			if (this.selectionStart != this.selectionEnd && c === this.value.substr(this.selectionStart, 1)){
-				console.log("selelectionStart");
 				this.selectionStart++;
 				ev.preventDefault();
 				return false;
@@ -40,7 +37,6 @@ function doAutocomplete(nodesAutocomplete){
 		}
 		else {
 			var range = document.selection.createRange();
-				console.log("createRange");
 			if (c === range.text.substr(0, 1)){
 				range.moveStart("character", 1);
 				range.select();
@@ -59,7 +55,7 @@ function doAutocomplete(nodesAutocomplete){
 			ev.keyCode !== 46 && // delete
 			this.value
 		){
-			console.log("onkeyup");
+
 			var found = getAutocomplete(this.value);
 			if (found.length){
 				var newValue = found[0];

@@ -1,5 +1,6 @@
 (function() {
 	$(document).ready(function() {
+		
 
 		 var color = d3.scale.category20();    //different colours
 		 var publicationsJSON = []
@@ -85,6 +86,14 @@
 				.append("a")
             	.attr("xlink:href", function(d) {return "author.html?name=" + d.id});
 				
+			/*var tip = d3.tip()
+				.attr('class', 'd3-tip')
+				.offset([-10, 0])
+				.html(function(d) {
+					return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
+				})
+				
+				vis.call(tip);*/
 				
 			nodeEnter.append("circle")
 				.attr("class", "circle")
@@ -93,22 +102,24 @@
 				.attr("y", "-8px")
 				.attr("width", "16px")
 				.attr("height", "16px")
-				.attr("fill", function(d) {
-						return color(d.group);
-				});
-				//.attr("fill", function(){
-                //	return 'rgb(0,120,120)';
-     			//})
+				//.on('mouseover', tip.show)
+				//.on('mouseout', tip.hide)
+				//.attr("fill", function(d) {
+				//		return color(d.group);
+				//});
+				.attr("fill", function(){
+                	return 'rgb(0,120,120)';
+     			});
 				
 				
-			nodeEnter.append("text")
+			/*nodeEnter.append("text")
 				.attr("class", "nodetext")
 				.attr("dx", 12)
 				.attr("dy", ".35em")
 				.text(function(d) {return d.id})
 				.attr("font-family", "sans-serif")
           		.attr("font-size", "11px")
-          		.attr("fill", "black");
+          		.attr("fill", "black");*/
 			
 			node.exit().remove();
 			
@@ -162,7 +173,6 @@
 
 									nodes.push(node);
 									graph.addNode(node);
-									authorDouble = false;
 								} else {
 									authorDouble = false;
 								}

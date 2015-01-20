@@ -26,20 +26,18 @@
 			for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
 				for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j += 1) {
 					names.push(publicationsJSON[i].authors[j].name);
-					$( "#select" ).append( "<option class='option' value='" + publicationsJSON[i].authors[j].name + "'>" + publicationsJSON[i].authors[j].name + "</option>" );
+					$( "#select" ).append( "<option class='option' value='" + publicationsJSON[i].authors[j].name + "' selected='" + authorname + ">" + publicationsJSON[i].authors[j].name + "</option>" );
 				
 				}
 			}
 			$('.option').click(function(){
-				//alert($('#select').val());
 				author = $('#select').val();
 				console.log(author);
 				showAuthorInformation(author);
 			});
 			
-			console.log("beforeAutocomplete");
+			//autocomplete-function
 			doAutocomplete(names);
-			console.log("afterAutocomplete");
 
 
 			function showAuthorInformation(author){
