@@ -7,7 +7,12 @@
     // get url info
     var query = window.location.search.substring(1);
     var authorname = query.split("=")[1];
+	
+	if (authorname !== undefined){
     var author = authorname.replace(/\+/g, ' ');
+	}else{
+		var author = "Heinrich Hussmann"
+	}
 
     $('#please').hide();
   

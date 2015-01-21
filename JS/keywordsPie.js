@@ -7,7 +7,17 @@
 
     // get url info
     var query = window.location.search.substring(1);
-    var authorname = query.split("=")[1];
+    //var authorname = query.split("=")[1];
+	var serachString = query.split("=")[1];
+	var name1 = serachString.split("+")[0];
+	var name2 = serachString.split("+")[1];
+	
+	if (name2 !== undefined) {
+	authorname = name1 + " " + name2;
+	console.log("Authorname = " + authorname);
+	}else{
+		authorname = name1;
+	}
     var author = authorname.replace(/%20/g, ' ');
   
     // create a new pubDB json object
