@@ -2,7 +2,6 @@
 	$(document).ready(function() {
 		
 
-		 var color = d3.scale.category20();    //different colours
 		 var publicationsJSON = []
 			authorsJSON = [];
 		var nodes = [];
@@ -86,14 +85,14 @@
 				.append("a")
             	.attr("xlink:href", function(d) {return "author.html?name=" + d.id});
 				
-			/*var tip = d3.tip()
+			var tip = d3.tip()
 				.attr('class', 'd3-tip')
 				.offset([-10, 0])
 				.html(function(d) {
-					return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
+					return "<span style='color:white'>" + d.id + "</span>";
 				})
 				
-				vis.call(tip);*/
+				vis.call(tip);
 				
 			nodeEnter.append("circle")
 				.attr("class", "circle")
@@ -102,11 +101,8 @@
 				.attr("y", "-8px")
 				.attr("width", "16px")
 				.attr("height", "16px")
-				//.on('mouseover', tip.show)
-				//.on('mouseout', tip.hide)
-				//.attr("fill", function(d) {
-				//		return color(d.group);
-				//});
+				.on('mouseover', tip.show)
+				.on('mouseout', tip.hide)
 				.attr("fill", function(){
                 	return 'rgb(0,120,120)';
      			});

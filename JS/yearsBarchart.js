@@ -12,7 +12,6 @@ $(document).ready(function() {
 	
 	if (name2 !== undefined) {
 	authorname = name1 + " " + name2;
-	console.log("Authorname = " + authorname);
 	}else{
 		authorname = name1;
 	}
@@ -27,7 +26,6 @@ $(document).ready(function() {
     // pass dbObject to buildJSON method -> get a json object back (<- created on client side)
     converter.buildPublicationJSON(dbObject, function(pubData) {
       publicationsJSON = pubData;
-      //console.log(JSON.stringify(publicationsJSON));
 
       converter.buildAuthorJSON(pubData, function(authorData) {
         authorsJSON = authorData;
@@ -88,7 +86,6 @@ $(document).ready(function() {
           })
           .attr("fill", function(d) {
             return "rgb(0, " + (d * 10) + ", " + (d * 10) + ")";
-            console.log(d);
           });
 
         svg.selectAll("text")

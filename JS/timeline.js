@@ -11,7 +11,7 @@
 	if (authorname !== undefined){
     var author = authorname.replace(/\+/g, ' ');
 	}else{
-		var author = "Heinrich Hussmann"
+		var author = "Alina Hang"
 	}
 
     $('#please').hide();

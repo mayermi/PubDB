@@ -1,13 +1,11 @@
 
 function doAutocomplete(nodesAutocomplete){
-	console.log("doAutocomplete");
 	function getAutocomplete(value){
 		
 		var values = nodesAutocomplete;
-		console.log("values = " + values);
 		var found = [];
+		
 		for (var i = 0; i < values.length; i++){
-			
 			if (values[i].substring(0, value.length) === value){
 				found.push(values[i]);
 			}
@@ -18,6 +16,7 @@ function doAutocomplete(nodesAutocomplete){
 	var input = document.getElementById("searchAuthor");
 	var oldValue = input.value;
 	
+	//if key is pressed in input field
 	input.onkeydown = function(ev){
 		oldValue = this.value;
 	};

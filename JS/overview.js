@@ -6,12 +6,11 @@
 	var names = [];
 	var authorname;
 	var authorDouble = false;
-	var publicationtitles = [];
-	var publicationtitlesLI= [];
+
+
 
     // get url info
     var query = window.location.search.substring(1);
-    //var authorname = query.split("=")[1];
 	var serachString = query.split("=")[1];
 	var name1 = serachString.split("+")[0];
 	var name2 = serachString.split("+")[1];
@@ -35,14 +34,10 @@
         converter.buildAuthorJSON(pubData, function(authorData) {
           authorsJSON = authorData;
 
-		  showAuthorInformation(author);
-	
+			//get list of author names
 			for (var i = 0, l = publicationsJSON.length; i < l; i++) {
 				for (var j = 0, m = publicationsJSON[i].authors.length; j < m; j++) {
 					var selectionValue = publicationsJSON[i].authors[j].name;
-					
-					
-					//console.log("author = " + selectionValue);
 					
 					for(var counter=0; counter<names.length; counter++) {
 						if(selectionValue == names[counter]) {				
@@ -61,25 +56,15 @@
 				
 				}
 			}
-			//$( "#select" ).append( "<option class='option' value='" + names + "' selected='" + authorname + ">" + names + "</option>" );
-			
-			$('.option').click(function(){
-				author = $('#select').val();
-				showAuthorInformation(author);
-			});
-			
-			
 			
 			//autocomplete-function
 			doAutocomplete(names);
 
 
-			function showAuthorInformation(author){
-			
-			  publicationtitles = [];
-			  publicationtitlesLI= [];
+			var publicationtitles = [];
+			var publicationtitlesLI= [];
 
-			  for (var i = 0, l = authorsJSON.length; i < l; i += 1) {
+			for (var i = 0, l = authorsJSON.length; i < l; i += 1) {
 				if(authorsJSON[i].name === author){
 				  var publications = authorsJSON[i].publications; // Array with all publications
 				  for (var j = 0, m = publications.length; j < m; j += 1) {
@@ -90,15 +75,13 @@
 					}
 				  }
 				}
-			  }
+			 }
 
-			  $.each(publicationtitles, function(i, item) {
+			 $.each(publicationtitles, function(i, item) {
 				publicationtitlesLI.push('<li>' + item + '</li>');
-			  });  // close each()
-			  $('#publicationoverview').append( publicationtitlesLI.join('') );
+			 });  // close each()
+			 $('#publicationoverview').append( publicationtitlesLI.join('') );
 	
-		
-			}
 		
         });
       });
