@@ -89,6 +89,16 @@
           var endyear = $('#endinyear').attr('placeholder');;
 
           $('#wonaward').click(function(){
+            if($('#begininyear').val() === '') {
+                beginyear =  $('#begininyear').attr('placeholder');
+              } else {
+                beginyear = $('#begininyear').val();
+              }
+            if($('#endinyear').val() === '') {
+                endyear =  $('#endinyear').attr('placeholder');
+              } else {
+                endyear = $('#endinyear').val();
+              }
             var newyears = [], filtereddata= [];
             for (var i = 0, l = years.length; i < l; i += 1) {
               if(years[i] >= beginyear && years[i] <= endyear) {
@@ -130,7 +140,6 @@
                 beginyear =  $('#begininyear').attr('placeholder');
               } else {
                 beginyear = $('#begininyear').val();
-                console.log($('#begininyear').val());
               }
               for (var i = 0, l = years.length; i < l; i += 1) {
                 if(years[i] >= beginyear && years[i] <= endyear) {
@@ -166,10 +175,6 @@
                 endyear =  $('#endinyear').attr('placeholder');
               } else {
                 endyear = $('#endinyear').val();
-                console.log($('#endinyear').val());
-                if ($('#endinyear').val() === '') {
-                  console.log('end is near');
-                };
               }
               console.log(endyear);
               for (var i = 0, l = years.length; i < l; i += 1) {
