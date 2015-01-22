@@ -32,7 +32,7 @@
           var dataset = [];
           var coauthors = [];
           var correctAuthor = false;
-		  var names = [];
+		      var names = [];
 
           for (var p = 0, q = authorsJSON.length; p < q; p += 1) {
             if(authorsJSON[p].name === author) {
@@ -49,13 +49,13 @@
           for (var i = 0, l = publicationsJSON.length; i < l; i += 1) {
             for (var j = 0, k = publicationsJSON[i].authors.length; j < k; j += 1) {
 			
-				names.push(publicationsJSON[i].authors[j].name);
+				      names.push(publicationsJSON[i].authors[j].name);
 
-				if(publicationsJSON[i].authors[j].name === author){
-					var year = Number(publicationsJSON[i].year);
-					years.push(year);
-					coauthors.push([year, publicationsJSON[i].authors, publicationsJSON[i].award]);
-				}
+				      if(publicationsJSON[i].authors[j].name === author){
+					     var year = Number(publicationsJSON[i].year);
+					     years.push(year);
+					     coauthors.push([year, publicationsJSON[i].authors, publicationsJSON[i].award]);
+				      }
             }
           }
 		  
@@ -64,7 +64,9 @@
 
           // get info for circle x and y
           var data = addupyears(coauthors);
-          newdata = allauthorslisted(data);
+          // newdata = allauthorslisted(data);
+          var alldata = allauthorslisted(data);
+          var filtereddata= [];
 
           years = countyears(years)[0];
 
@@ -74,74 +76,121 @@
 
           //Width and height
           var w = years.length * 100 + 100;
-          var h = getheight(data) * 26;
+          var h = getheight(alldata) * 26;
 
           //Create SVG element
           var svg = d3.select("#timeline")
             .append("svg")
             .attr("width", w)
             .attr("height", h);
-          buildSVG(svg, w, h, years, newdata, author);
+          buildSVG(svg, w, h, years, alldata, author);
+
+          var beginyear = $('#begininyear').attr('placeholder');
+          var endyear = $('#endinyear').attr('placeholder');;
 
           $('#wonaward').click(function(){
+            var newyears = [], filtereddata= [];
+            for (var i = 0, l = years.length; i < l; i += 1) {
+              if(years[i] >= beginyear && years[i] <= endyear) {
+                newyears.push(years[i]);
+              }
+            }
             if($('#wonaward').is(':checked')) {
-              var a = [];
-
-              for (var i = 0, l = coauthors.length; i < l; i += 1) {
-                if(coauthors[i][2]) {
-                  a.push(coauthors[i]);
+              for (var i = 0, l = alldata.length; i < l; i += 1) {
+                if(alldata[i][5] && alldata[i][0] >= beginyear && alldata[i][0] <= endyear) {
+                  filtereddata.push(alldata[i]);
                 }
               }
-              var filtereddata = addupyears(a);
-              newfiltereddata = allauthorslisted(filtereddata);
               svg.selectAll("*").remove();
-              buildSVG(svg, w, h, years, newfiltereddata, author);
+              var w = newyears.length * 100 + 100;
+              var h = getheight(alldata) * 26;
+              svg.attr('width', w);
+              svg.attr('height', h);
+              buildSVG(svg, w, h, newyears, filtereddata, author);
 
             } else {
               svg.selectAll("*").remove();
-              buildSVG(svg, w, h, years, newdata, author);
+              var w = newyears.length * 100 + 100;
+              var h = getheight(alldata) * 26;
+              svg.attr('width', w);
+              svg.attr('height', h);
+              buildSVG(svg, w, h, newyears, alldata, author);
             }
           });
 
           $('#beginyearbutton').click(function(){
               var newyears = [], newfiltereddata = [];
-              var input = $('#begininyear').val();
-              console.log(input);
+              if($('#begininyear').val() === '') {
+                beginyear =  $('#begininyear').attr('placeholder');
+              } else {
+                beginyear = $('#begininyear').val();
+                console.log($('#begininyear').val());
+              }
               for (var i = 0, l = years.length; i < l; i += 1) {
-                if(years[i] >= input) {
+                if(years[i] >= beginyear && years[i] <= endyear) {
                   newyears.push(years[i]);
                 }
               }
-              for (var i = 0, l = newdata.length; i < l; i += 1) {
-                if(newdata[i][0] >= input) {
-                  newfiltereddata.push(newdata[i]);
+
+              if($('#wonaward').is(':checked')) {
+                for (var i = 0, l = alldata.length; i < l; i += 1) {
+                  if(alldata[i][5] && alldata[i][0] >= beginyear && alldata[i][0] <= endyear) {
+                    newfiltereddata.push(alldata[i]);
+                  }
+                }
+
+              } else {
+                for (var i = 0, l = alldata.length; i < l; i += 1) {
+                  if(alldata[i][0] >= beginyear && alldata[i][0] <= endyear) {
+                    newfiltereddata.push(alldata[i]);
+                  }
                 }
               }
               svg.selectAll("*").remove();
               var w = newyears.length * 100 + 100;
-              var h = getheight(newfiltereddata) * 26;
+              var h = getheight(alldata) * 26;
+              svg.attr('width', w);
+              svg.attr('height', h);
               buildSVG(svg, w, h, newyears, newfiltereddata, author);
           });
 
           $('#endyearbutton').click(function(){
               var newyears = [], newfiltereddata = [];
-              var input = $('#endinyear').val();
-              console.log(input);
+              if($('#endinyear').val() === '') {
+                endyear =  $('#endinyear').attr('placeholder');
+              } else {
+                endyear = $('#endinyear').val();
+                console.log($('#endinyear').val());
+                if ($('#endinyear').val() === '') {
+                  console.log('end is near');
+                };
+              }
+              console.log(endyear);
               for (var i = 0, l = years.length; i < l; i += 1) {
-                if(years[i] <= input) {
+                if(years[i] >= beginyear && years[i] <= endyear) {
                   newyears.push(years[i]);
                 }
               }
-              for (var i = 0, l = newdata.length; i < l; i += 1) {
-                if(newdata[i][0] <= input) {
-                  newfiltereddata.push(newdata[i]);
+
+              if($('#wonaward').is(':checked')) {
+                for (var i = 0, l = alldata.length; i < l; i += 1) {
+                  if(alldata[i][5] && alldata[i][0] >= beginyear && alldata[i][0] <= endyear) {
+                    newfiltereddata.push(alldata[i]);
+                  }
+                }
+
+              } else {
+                for (var i = 0, l = alldata.length; i < l; i += 1) {
+                  if(alldata[i][0] >= beginyear && alldata[i][0] <= endyear) {
+                    newfiltereddata.push(alldata[i]);
+                  }
                 }
               }
               svg.selectAll("*").remove();
               var w = newyears.length * 100 + 100;
-              var h = getheight(newfiltereddata) * 26;
+              var h = getheight(alldata) * 26;
               svg.attr('width', w);
-              svg.attr('height', h)
+              svg.attr('height', h);
               buildSVG(svg, w, h, newyears, newfiltereddata, author);
           });
         });
@@ -156,10 +205,10 @@
     for(var i = 0; i < arr.length; i++) {
       if(arr[i][0] !== prev ) {
         c = 1;
-        a.push([parseInt(arr[i][0]), c, arr[i][1]]);
+        a.push([parseInt(arr[i][0]), c, arr[i][1], arr[i][2]]);
       } else {
         c++;
-        a.push([parseInt(arr[i][0]), c, arr[i][1]]);
+        a.push([parseInt(arr[i][0]), c, arr[i][1], arr[i][2]]);
       }
       prev = arr[i][0];
     }
@@ -172,7 +221,7 @@
 
     for(var i = 0; i < arr.length; i++) {
       for(var j = 0; j < arr[i][2].length; j++) {
-        a.push([arr[i][0], arr[i][1], arr[i][2][j].name, arr[i][2].length, j]);
+        a.push([arr[i][0], arr[i][1], arr[i][2][j].name, arr[i][2].length, j, arr[i][3]]);
       }
     }
 
@@ -181,7 +230,7 @@
 
   function buildSVG(svg, w, h, years, data, author) {
           var barPadding = 20;
-    
+
           // create relative scale
           var yearsdiff = years[years.length-1] - years[0];
           var yearsscale = ((w-100)-2*barPadding)/yearsdiff;
