@@ -109,12 +109,18 @@
               buildSVG(svg, w, h, newyears, filtereddata, author);
 
             } else {
+              for (var i = 0, l = alldata.length; i < l; i += 1) {
+                if(alldata[i][0] >= beginyear && alldata[i][0] <= endyear) {
+                  filtereddata.push(alldata[i]);
+                }
+              }
+
               svg.selectAll("*").remove();
               var w = newyears.length * 100 + 100;
               var h = getheight(alldata) * 26;
               svg.attr('width', w);
               svg.attr('height', h);
-              buildSVG(svg, w, h, newyears, alldata, author);
+              buildSVG(svg, w, h, newyears, filtereddata, author);
             }
           });
 
